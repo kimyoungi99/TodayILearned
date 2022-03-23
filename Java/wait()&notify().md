@@ -1,0 +1,25 @@
+## `wait()` & `notify()`
+### `synchronized`
+하나의 객체 인스턴스를 여러 쓰레드에서 접근하는 경우 동시성 문제가 생길 수 있다. 동시성 문제를 예방하기 위해 `synchronized` 키워드를 사용할 수 있다.
+```java
+// synchronized 메서드 
+public synchronized void method1() {
+  ...
+}
+
+public void method2() {
+  // synchronized 블록
+  synchronized(this) {
+    ...
+  }
+}
+```
+`synchronized` 키워드가 달린 메서드와 블록안에 들어간 쓰레드는 해당 객체 인스턴스에 LOCK을 걸어 다른 쓰레드에서 접근하지 못하게 한다.
+
+### `wait()` & `notify()`
+`synchronized` 통해 객체에 LOCK을 걸게 되면 안전한 사용이 가능하지만, 특정 조건이 만족될 때까지 해당 기다려야하는 경우 다른 쓰레드들은 해당 LOCK이 풀릴 때 까지 함께 기다려야하는 상황이 발생한다.
+
+동기화 블럭에서 `wait()`을 호출하면 자신이 객체에 걸어두었던 LOCK을 해제하고 `waiting pool`에서 대기하게 된다.
+
+`notify()`또는 `notifyAll()`을 통해 `waiting pool`에 대기중인 객체를 깨울 수 있으며 `notify()`는 한개의 객체, `notifyAll()`은 `waiting pool`에 대기중인 모든 객체를 깨운다.
+*(`notify()`를 통해 어떤 객체가 깨어날 지 모르니 `notifyAll()`을 통해 모든 객체를 깨우고 JVM의 쓰레드 스케쥴링에 맡기는 것이 안전하다고 한다.)*
